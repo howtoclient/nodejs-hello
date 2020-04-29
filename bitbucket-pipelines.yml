@@ -1,0 +1,34 @@
+image: docker:stable
+definitions:
+  steps:
+    - step: &build-and-deploy-image
+        services:
+          - docker
+        name: Build docker image
+        script:
+          - docker build -t "nodejs-hello:$BITBUCKET_COMMIT" -t "nodejs-hello:latest" .
+          - pipe: atlassian/aws-ecr-push-image:1.1.2
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+              IMAGE_NAME: "nodejs-hello:$BITBUCKET_COMMIT"
+              TAGS: '$BITBUCKET_COMMIT'
+          - pipe: atlassian/kubectl-run:1.1.6
+            variables:
+              KUBE_CONFIG: $KUBE_CONFIG
+              KUBECTL_COMMAND: 'apply'
+              RESOURCE_PATH: './k8s'
+          - pipe: atlassian/kubectl-run:1.1.6
+            variables:
+              KUBE_CONFIG: $KUBE_CONFIG
+              KUBECTL_COMMAND: 'set image deployments/nodejs-hello nodejs-hello=$AWS_ECR_HOST/nodejs-hello:$BITBUCKET_COMMIT'
+
+pipelines:
+  branches:
+    master:
+      - step:
+          <<: *build-and-deploy-image
+          name: build docker image
+          deployment: production
+

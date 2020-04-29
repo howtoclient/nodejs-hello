@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: [APP-ROUTE-NAME]
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: [APP-SUB-DOMAIN].your-domain.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: [APP-NAME]
+              servicePort: [APP-PORT]

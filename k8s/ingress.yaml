@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nodejs-hello-route
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: nodejs-hello.example.com      <-- dont forget to point subdomain to ingress load balancer
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: nodejs-hello
+              servicePort: 3000

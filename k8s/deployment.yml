@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-hello
+  labels:
+    app: nodejs-hello
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodejs-hello
+  template:
+    metadata:
+      labels:
+        app: nodejs-hello
+    spec:
+      containers:
+        - name: nodejs-hello
+          readinessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          envFrom:
+            - secretRef:
+                name: nodejs-hello-secret             <-- do not forget to create ( must be created manually )
+          image: [Your ECR host name/nodejs-hello]    <-- do not forget to replace
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000

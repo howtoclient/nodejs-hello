@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: [APP-NAME]
+  labels:
+    app: [APP-NAME]
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: [APP-NAME]
+  template:
+    metadata:
+      labels:
+        app: [APP-NAME]
+    spec:
+      containers:
+        - name: [APP-NAME]
+          readinessProbe:
+            tcpSocket:
+              port: [APP-PORT]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          envFrom:
+            - secretRef:
+                name: [APP-NAME-SECRET]
+          image: [AWS-ECR-HOST-URL/APP-NAME] or [AWS-ECR-IMAGE-URL]
+          imagePullPolicy: Always
+          ports:
+            - containerPort: [APP-PORT]
