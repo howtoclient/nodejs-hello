@@ -1,7 +1,7 @@
 # nodejs-hello
 Nodejs application that contains basic k8s config yaml and aws bitbucket deploy to k8s
 
-#deployment.yaml example
+# deployment.yaml example
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -34,7 +34,7 @@ spec:
           ports:
             - containerPort: 3000
 ```
-#service.yaml example
+# service.yaml example
 ```yaml
 apiVersion: v1
 kind: Service
@@ -50,7 +50,7 @@ spec:
       targetPort: 3000
 ```
 
-#ingress.yaml example
+# ingress.yaml example
 ```yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -69,7 +69,7 @@ spec:
               servicePort: 3000
 ```
 
-#bitbucket-pipelines.yaml example
+# bitbucket-pipelines.yaml example
 -  `$AWS_ACCESS_KEY_ID` - (SECRET) aws IAM access key ID
 -  `$AWS_SECRET_ACCESS_KEY` - (SECRET) aws IAM secret key ID
 -  `$AWS_DEFAULT_REGION` - your aws cluster region
@@ -113,7 +113,7 @@ pipelines:
 
 
 ```
-#Dockerfile example
+# Dockerfile example
 ```yaml
 FROM node:12.13-alpine
 WORKDIR /usr/src/app
